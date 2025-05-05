@@ -17,3 +17,30 @@ def main():
         print("Reader terminated by user.")
 
 main()
+
+
+
+import serial
+import time
+
+def main():
+    try:
+        ser = serial.Serial('COM3', 9600, timeout=1)
+        time.sleep(2)  # bağlantının oturması için bekle
+
+        while True:
+            if ser.in_waiting:
+                data = ser.readline().decode().strip()
+                if data:
+                    print(f"Received: {data}")
+            time.sleep(0.1)
+
+    except KeyboardInterrupt:
+        print("Reader stopped.")
+    except serial.SerialException as e:
+        print(f"Serial error: {e}")
+    finally:
+        if 'ser' in locals() and ser.is_open:
+            ser.close()
+
+main()
